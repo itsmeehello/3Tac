@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+#include <cstring>
+using namespace std;
+
+// Function to generate Assembly from Three-Address Code (TAC)
+void generateAssembly(const vector<string>& tac) {
+    cout << "\nGenerated Assembly Code:\n";
+
+    for (const string& instruction : tac) {
+        char result[10], op1[10], op[2], op2[10];
+        int count = sscanf(instruction.c_str(), "%s = %s %s %s", result, op1, op, op2);
+
+        if (count == 3) {
+            // Simple assignment (t1 = a)
+            cout << "MOV " << result << ", " << op1 << endl;
+        } else if (count == 4) {
+            // Arithmetic operation (t1 = b * c)
+            cout << "MOV R1, " << op1 << endl;
+            if (op[0] == '+') cout << "ADD R1, " << op2 << endl;
+            else if (op[0] == '-') cout << "SUB R1, " << op2 << endl;
+            else if (op[0] == '*') cout << "MUL R1, " << op2 << endl;
+            else if (op[0] == '/') cout << "DIV R1, " << op2 << endl;
+            cout << "MOV " << result << ", R1" << endl;
+        }
+    }
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of expressions: ";
+    cin >> n;
+    cin.ignore();  // Ignore newline
+
+    vector<string> tac(n);
+    cout << "Enter Expressions:\n";
+    for (int i = 0; i < n; i++) {
+        getline(cin, tac[i]);
+    }
+
+    generateAssembly(tac);
+    return 0;
+}
