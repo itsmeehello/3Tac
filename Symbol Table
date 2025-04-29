@@ -1,0 +1,60 @@
+// Online C compiler to run C program online
+#include <stdio.h>
+#include<stdlib.h>
+#include<ctype.h>
+
+typedef struct{
+    char symbol ;
+    void *address ;
+    char type[20] ;
+}Symbol ;
+
+Symbol symTable[1000] ;
+int cnt = 0 ;
+
+void addtab(char symbol ,char *type){
+    symTable[cnt].symbol = symbol ;
+    symTable[cnt].address = malloc(sizeof(char)) ;
+    snprintf(symTable[cnt].type,sizeof(symTable[cnt].type),"%s",type) ;
+    cnt++ ;
+}
+
+void printab(){
+    printf("Symbol Table \n ") ;
+    printf("Symbol      Addresss      Type\n") ;
+    
+    for(int i=0 ; i<cnt ; i++)
+    {
+        printf("  %c      %p    %s" ,
+        symTable[i].symbol,symTable[i].address,symTable[i].type) ;
+        printf("\n") ;
+    }
+}
+
+int main() {
+    char exp[100] ;
+    printf("enter the expression ending with $ : ") ;
+    scanf("%s",exp) ;
+    printf("Given expression : ") ;
+    for(int i=0 ; exp[i] != '$' ;i++)
+    {
+        printf("%c",exp[i]) ;
+    }
+    
+    for(int i=0 ; exp[i] != '$' ;i++)
+    {
+        if(isalpha(exp[i]))
+        {
+            addtab(exp[i] ,"identifier") ;
+        }
+        else {
+            if(exp[i]=='+' || exp[i]=='-'|| exp[i]=='*'||exp[i]=='/')
+            {
+                addtab(exp[i] ,"operator") ;
+            }
+        }
+    }
+  printab() ;  
+  
+    return 0;
+}
